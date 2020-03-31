@@ -21,11 +21,19 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
         """
-        return self.__objects
+        returns a dictionary of all objects if cls is not provided
+
+        If cls is provided, it will return all 
+        objects/instances of that class.
+        """
+        obj_dict = {}
+        if cls is not None:
+            obj_dict = {key: value for key, value
+                        in self.__objects.items() if cls.__name__ in key}
+            return obj_dict
+        else:
+            return self.__objects
 
     def new(self, obj):
         """sets __object to given obj
@@ -55,3 +63,15 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
+
+     def delete(self, obj=None):
+        """
+        Delete obj from __objects if obj in __objects.
+        """
+        del self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)]
+
+    def close(self):
+        """
+        Call reload() method to deserialize JSON file to objects
+        """
+        self.reload()
