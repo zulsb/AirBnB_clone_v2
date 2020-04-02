@@ -69,7 +69,7 @@ class Place(BaseModel, Base):
             # TODO implement the deletion requirement
             reviews = relationship('Review',
                                    cascade='delete, delete-orphan',
-                                     backref='place')
+                                   backref='place')
             amenities = relationship('Amenity',
                                      secondary='place_amenity')
     else:
