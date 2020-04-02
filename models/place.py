@@ -3,7 +3,7 @@
 import os
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -64,8 +64,7 @@ class Place(BaseModel, Base):
         if os.environ['HBNB_TYPE_STORAGE'] == 'db':
             # TODO implement the deletion requirement
             reviews = relationship('Review',
-                                   cascade='delete, delete-orphan',
-                                   backref='place')
+                                   cascade='delete, delete-orphan')
             amenities = relationship('Amenity',
                                      secondary='place_amenity')
     else:
@@ -73,7 +72,7 @@ class Place(BaseModel, Base):
         def reviews(self):
             """Property getter of list of Review instances
             where place_id equals current Place.id"""
-            review_dict = storage.all(Review)
+            review_dict = models.storage.all(Review)
             return [review for review in review_dict.values()
                     if review.place_id == self.id]
 
@@ -81,7 +80,7 @@ class Place(BaseModel, Base):
         def amenities(self):
             """Property getter of list of Amenity instances
             where place_id equals current Place.id"""
-            amenity_dict = storage.all(Amenity)
+            amenity_dict = models.storage.all(Amenity)
             return [amenity for amenity in amenity_dict.values()
                     if amenity.id in self.amenity_ids]
 
