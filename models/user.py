@@ -6,16 +6,33 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship, backref
 
 
-class User(BaseModel, Base): 
-    """This is the class for user
+class User(BaseModel, Base):
+    """
+    This is the class for User objects.
+    It is associated with the SQL table 'users'.
     Attributes:
-        email: email address
-        password: password for you login
-        first_name: first name
-        last_name: last name
+        email: non-Null String, 128 characters
+        password: non-Null String, 128 characters
+        first_name: nullable String, 128 characters
+        last_name: nullable String, 128 characters
     """
     __tablename__ = 'users'
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    first_name = Column(String(128), nullable=True)
-    last_name = Column(String(128), nullable=True)
+
+    email = Column(String(128),
+                   nullable=False)
+    password = Column(String(128),
+                      nullable=False)
+    first_name = Column(String(128),
+                        nullable=True)
+    last_name = Column(String(128),
+                       nullable=True)
+
+    if 'HBNB_TYPE_STORAGE' in os.environ:
+        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
+            # TODO implement the deletion requirement
+            places = relationship('Place',
+                                  cascade='delete, delete-orphan',
+                                  backref='user')
+            reviews = relationship('Review',
+                                   cascade='delete, delete-orphan',
+                                   backref='user')
