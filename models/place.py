@@ -1,9 +1,13 @@
 #!/usr/bin/python3
 """This is the place class"""
 import os
+import models
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
+from models.amenity import Amenity
+from models.review import Review
+from os import getenv
 
 
 place_amenity = Table('place_amenity', Base.metadata,
