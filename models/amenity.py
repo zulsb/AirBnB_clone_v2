@@ -1,13 +1,22 @@
 #!/usr/bin/python3
 """This is the amenity class"""
-from models.base_model import BaseModel
+# import os
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship, backref
 
 
-class Amenity(BaseModel):
-    """This is the class for Amenity
-    Attributes:
-        name: input name
+class Amenity(BaseModel, Base):
     """
-    __tablename__ = "amenities"
-    name = Column(String(128), nullable=False)
+    This is the class for Amenity objects.
+    It is associated with the SQL table 'amenities'.
+    Attributes:
+        name: non-Null String, 128 characters
+    """
+    __tablename__ = 'amenities'
+
+    name = Column(String(128),
+                  nullable=False)
+    place_amenities = relationship('Place',
+                                   secondary='place_amenity',
+                                   backref='places')
