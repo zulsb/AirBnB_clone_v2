@@ -1,11 +1,8 @@
 #!/usr/bin/python3
 """This is the city class"""
-import os
-import models
 from models.base_model import BaseModel, Base
-import models.state
-from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class City(BaseModel, Base):
@@ -17,15 +14,6 @@ class City(BaseModel, Base):
     """
     __tablename__ = 'cities'
 
-    state_id = Column(String(60),
-                      ForeignKey("states.id"),
-                      nullable=False)
-    name = Column(String(128),
-                  nullable=False)
-
-    if 'HBNB_TYPE_STORAGE' in os.environ:
-        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
-            # TODO implement the deletion requirement
-            places = relationship('Place',
-                                  cascade='delete, delete-orphan',
-                                  backref='cities')
+    state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
+    name = Column(String(128), nullable=False)
+    places = relationship("Place", backref="cities", cascade="all, delete")
