@@ -17,8 +17,6 @@ class City(BaseModel, Base):
     """
     __tablename__ = 'cities'
 
-    # TODO verify this syntax for ForeignKey
-    # https://docs.sqlalchemy.org/en/latest/orm/examples.html#writing-your-own-suites
     state_id = Column(String(60),
                       ForeignKey("states.id"),
                       nullable=False)
