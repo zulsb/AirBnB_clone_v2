@@ -64,27 +64,34 @@ class Place(BaseModel, Base):
                        nullable=True)
     amenity_ids = []
 
-    if getenv("HBNB_TYPE_STORAGE") != "db":
+    if 'HBNB_TYPE_STORAGE' in os.environ:
+        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
+            # TODO implement the deletion requirement
+            reviews = relationship('Review',
+                                   cascade='delete, delete-orphan',
+                                   backref='place')
+            amenities = relationship('Amenity',
+                                     secondary='place_amenity')
+    else:
         @property
         def reviews(self):
-            """Get reviews"""
-            list_return = []
-            for row in list(models.storage.all(Review).values()):
-                if row.place_id == self.id:
-                    list_return.append(row)
-            return list_return
+            """Property getter of list of Review instances
+            where place_id equals current Place.id"""
+            review_dict = storage.all(Review)
+            return [review for review in review_dict.values()
+                    if review.place_id == self.id]
 
         @property
         def amenities(self):
-            """Get/set linked Amenities."""
-            list_return = []
-            for row in list(models.storage.all(Amenity).values()):
-                if row.id in self.amenity_ids:
-                    list_return.append(row)
-            return list_return
+            """Property getter of list of Amenity instances
+            where place_id equals current Place.id"""
+            amenity_dict = storage.all(Amenity)
+            return [amenity for amenity in amenity_dict.values()
+                    if amenity.id in self.amenity_ids]
 
         @amenities.setter
-        def amenities(self, value):
-            """Set amenity value"""
-            if type(value) == Amenity:
-                self.amenity_ids.append(value.id)
+        def amenities(self, amty):
+            """Property setter that appends `amty`'s id
+            to the current Place amenity_ids"""
+            if isinstance(amty, Amenity) and amty.id not in self.amenity_ids:
+                self.amenity_ids.append(amty.id)
