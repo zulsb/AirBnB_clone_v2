@@ -19,13 +19,3 @@ class User(BaseModel, Base):
     password = Column(String(128), nullable=False)
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
-
-    if 'HBNB_TYPE_STORAGE' in os.environ:
-        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
-            # TODO implement the deletion requirement
-            places = relationship('Place',
-                                  cascade='delete, delete-orphan',
-                                  backref='user')
-            reviews = relationship('Review',
-                                   cascade='delete, delete-orphan',
-                                   backref='user')
