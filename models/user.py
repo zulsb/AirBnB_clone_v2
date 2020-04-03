@@ -29,7 +29,6 @@ class User(BaseModel, Base):
 
     if 'HBNB_TYPE_STORAGE' in os.environ:
         if os.environ['HBNB_TYPE_STORAGE'] == 'db':
-            # TODO implement the deletion requirement
             places = relationship('Place',
                                   cascade='all, delete',
                                   backref='user')
