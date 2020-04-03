@@ -42,12 +42,24 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not line:
                 raise SyntaxError()
-            my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            for element in my_list[1:]:
-                key, value = element.split("=")
-                value = value.replace("_", " ")
-                setattr(obj, key, eval(value))
+            args = line.split(" ")
+            obj = eval("{}()".format(args[0]))
+            for kvpair in args[1:]:
+                item = kvpair.split("=")
+                key = item[0]
+                value = item[1]
+                try:
+                    if value[0] == '"':
+                        value = value.strip('"') \
+                            .replace('\\', '') \
+                            .replace('_', ' ')
+                    elif '.' in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                    obj.__dict__[key] = value
+                except Exception:
+                    continue
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
