@@ -15,17 +15,17 @@ class State(BaseModel, Base):
     Attributes:
         name: String, 128 characters
     """
-    __tablename__ = 'states'
+    __tablename__ = "states"
 
     name = Column(String(128),
                   nullable=False)
 
-    if 'HBNB_TYPE_STORAGE' in os.environ:
-        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
-            cities = relationship('City',
-                                  backref='state',
-                                  cascade='delete, delete-orphan')
-        elif os.environ['HBNB_TYPE_STORAGE'] == 'fs':
+    if "HBNB_TYPE_STORAGE" in os.environ:
+        if os.environ["HBNB_TYPE_STORAGE"] == "db":
+            cities = relationship("City",
+                                  backref="state",
+                                  cascade="delete, delete-orphan")
+        elif os.environ["HBNB_TYPE_STORAGE"] == "fs":
             @property
             def cities(self):
                 """Property getter of list of city instances

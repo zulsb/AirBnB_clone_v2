@@ -46,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
             obj = eval("{}()".format(my_list[0]))
             for element in my_list[1:]:
                 key, value = element.split("=")
-                value = value.replace('_', ' ')
+                value = value.replace("_", " ")
                 setattr(obj, key, eval(value))
             obj.save()
             print("{}".format(obj.id))
@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
             if len(my_list) < 2:
                 raise IndexError()
             objects = storage.all()
-            key = my_list[0] + '.' + my_list[1]
+            key = my_list[0] + "." + my_list[1]
             if key in objects:
                 del objects[key]
                 storage.save()
@@ -136,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             objects = storage.all(args[0])
             for key in objects:
-                name = key.split('.')
+                name = key.split(".")
                 if name[0] == args[0]:
                     my_list.append(objects[key])
             print(my_list)
@@ -162,7 +162,7 @@ class HBNBCommand(cmd.Cmd):
             if len(my_list) < 2:
                 raise IndexError()
             objects = storage.all()
-            key = my_list[0] + '.' + my_list[1]
+            key = my_list[0] + "." + my_list[1]
             if key not in objects:
                 raise KeyError()
             if len(my_list) < 3:
@@ -198,7 +198,7 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             objects = storage.all()
             for key in objects:
-                name = key.split('.')
+                name = key.split(".")
                 if name[0] == my_list[0]:
                     counter += 1
             print(counter)
@@ -216,15 +216,15 @@ class HBNBCommand(cmd.Cmd):
         new_list.append(args[0])
         try:
             my_dict = eval(
-                args[1][args[1].find('{'):args[1].find('}')+1])
+                args[1][args[1].find("{"):args[1].find("}")+1])
         except Exception:
             my_dict = None
         if isinstance(my_dict, dict):
-            new_str = args[1][args[1].find('(')+1:args[1].find(')')]
+            new_str = args[1][args[1].find("(")+1:args[1].find(")")]
             new_list.append(((new_str.split(", "))[0]).strip('"'))
             new_list.append(my_dict)
             return new_list
-        new_str = args[1][args[1].find('(')+1:args[1].find(')')]
+        new_str = args[1][args[1].find("(")+1:args[1].find(")")]
         new_list.append(" ".join(new_str.split(", ")))
         return " ".join(i for i in new_list)
 
@@ -232,7 +232,7 @@ class HBNBCommand(cmd.Cmd):
         """retrieve all instances of a class and
         retrieve the number of instances
         """
-        my_list = line.split('.')
+        my_list = line.split(".")
         if len(my_list) >= 2:
             if my_list[1] == "all()":
                 self.do_all(my_list[0])
@@ -246,7 +246,7 @@ class HBNBCommand(cmd.Cmd):
                 args = self.strip_clean(my_list)
                 if isinstance(args, list):
                     obj = storage.all()
-                    key = args[0] + ' ' + args[1]
+                    key = args[0] + " " + args[1]
                     for k, v in args[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))
                 else:
@@ -255,5 +255,5 @@ class HBNBCommand(cmd.Cmd):
             cmd.Cmd.default(self, line)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()

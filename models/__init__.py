@@ -10,11 +10,11 @@ from models.place import Place
 from models.review import Review
 
 if "HBNB_TYPE_STORAGE" in os.environ:
-    if os.environ['HBNB_TYPE_STORAGE'] == 'db':
+    if os.environ["HBNB_TYPE_STORAGE"] == "db":
         from models.engine.db_storage import DBStorage
         storage = DBStorage()
         storage.reload()
-    elif os.environ['HBNB_TYPE_STORAGE'] == 'fs':
+    elif os.environ["HBNB_TYPE_STORAGE"] == "fs":
         from models.engine.file_storage import FileStorage
         storage = FileStorage()
         storage.reload()
