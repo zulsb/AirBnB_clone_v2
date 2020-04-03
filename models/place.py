@@ -62,17 +62,11 @@ class Place(BaseModel, Base):
                       nullable=True)
     longitude = Column(Float,
                        nullable=True)
+    reviews = relationship("Review", backref="place", cascade="all, delete")
+    amenities = relationship("Amenity", secondary="place_amenity")
     amenity_ids = []
 
-    if 'HBNB_TYPE_STORAGE' in os.environ:
-        if os.environ['HBNB_TYPE_STORAGE'] == 'db':
-            # TODO implement the deletion requirement
-            reviews = relationship('Review',
-                                   cascade='all, delete, delete-orphan',
-                                   backref='place')
-            amenities = relationship('Amenity',
-                                     secondary='place_amenity')
-    else:
+    if getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def reviews(self):
             """Property getter of list of Review instances
