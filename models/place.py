@@ -10,12 +10,12 @@ from models.review import Review
 from os import getenv
 
 
-place_amenity = Table('place_amenity', Base.metadata,
-                      Column('place_id', String(60),
-                             ForeignKey('places.id'),
+place_amenity = Table("place_amenity", Base.metadata,
+                      Column("place_id", String(60),
+                             ForeignKey("places.id"),
                              primary_key=True, nullable=False),
-                      Column('amenity_id', String(60),
-                             ForeignKey('amenities.id'),
+                      Column("amenity_id", String(60),
+                             ForeignKey("amenities.id"),
                              primary_key=True, nullable=False))
 
 
@@ -34,13 +34,13 @@ class Place(BaseModel, Base):
         longitude: longitude in float
         amenity_ids: list of Amenity ids
     """
-    __tablename__ = 'places'
+    __tablename__ = "places"
 
     city_id = Column(String(60),
-                     ForeignKey('cities.id'),
+                     ForeignKey("cities.id"),
                      nullable=False)
     user_id = Column(String(60),
-                     ForeignKey('users.id'),
+                     ForeignKey("users.id"),
                      nullable=False)
     name = Column(String(128),
                   nullable=False)
@@ -85,7 +85,7 @@ class Place(BaseModel, Base):
 
         @amenities.setter
         def amenities(self, amty):
-            """Property setter that appends `amty`'s id
+            """Property setter that appends amty id
             to the current Place amenity_ids"""
             if isinstance(amty, Amenity) and amty.id not in self.amenity_ids:
                 self.amenity_ids.append(amty.id)
