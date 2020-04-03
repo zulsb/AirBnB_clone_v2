@@ -35,7 +35,6 @@ class Place(BaseModel, Base):
         amenity_ids: list of Amenity ids
     """
     __tablename__ = "places"
-
     city_id = Column(String(60),
                      ForeignKey("cities.id"),
                      nullable=False)
