@@ -9,18 +9,13 @@ from sqlalchemy.orm import relationship
 
 
 class City(BaseModel, Base):
-    """
-    This is the class for City. It is linked to the cities table
+    """This is the class for City
     Attributes:
-        state_id: non-Null String, Foreign Key to State ID associated with city
-        name: non-Null String, name of city
+        state_id: The state id
+        name: input name
     """
     __tablename__ = "cities"
 
     state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
     name = Column(String(128), nullable=False)
-    if "HBNB_TYPE_STORAGE" in os.environ:
-        if os.environ["HBNB_TYPE_STORAGE"] == "db":
-            places = relationship("Place",
-                                  backref="cities",
-                                  cascade="all, delete")
+    places = relationship("Place", backref="cities", cascade="all, delete")
