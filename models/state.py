@@ -9,11 +9,9 @@ from sqlalchemy.orm import relationship, backref
 
 
 class State(BaseModel, Base):
-    """
-    This is the class for State objects.
-    It is associated with the SQL table 'states'.
+    """This is the class for State objects.
     Attributes:
-        name: String, 128 characters
+        name: Input name.
     """
     __tablename__ = "states"
 
@@ -24,7 +22,7 @@ class State(BaseModel, Base):
         if os.environ["HBNB_TYPE_STORAGE"] == "db":
             cities = relationship("City",
                                   backref="state",
-                                  cascade="delete, delete-orphan")
+                                  cascade="all, delete")
         elif os.environ["HBNB_TYPE_STORAGE"] == "fs":
             @property
             def cities(self):
