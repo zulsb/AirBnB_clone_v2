@@ -14,7 +14,6 @@ class State(BaseModel, Base):
         name: Input name.
     """
     __tablename__ = "states"
-
     name = Column(String(128),
                   nullable=False)
 
