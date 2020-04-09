@@ -1,95 +1,62 @@
 #!/usr/bin/python3
-"""tests for db storage"""
+"""test for databasse storage"""
 import unittest
-import pep8
-import json
-import os
-from models.base_model import BaseModel
-from models.user import User
+from models.place import Place
 from models.state import State
 from models.city import City
-from models.amenity import Amenity
-from models.place import Place
 from models.review import Review
-from models.engine.file_storage import FileStorage
+from os import getenv
+import MySQLdb
+import pep8
+from models.base_model import BaseModel
+from models.user import User
+from models.amenity import Amenity
+from models.engine.db_storage import DBStorage
+from models import storage
+import os
+import MySQLdb
 
 
-class TestFileStorage(unittest.TestCase):
-    '''this will test the FileStorage'''
+class TestDBStorage(unittest.TestCase):
+    """Test on the db"""
 
-    @classmethod
-    def setUpClass(cls):
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db',
+                     "can't run if storage is file")
+    def setUp(self):
         """set up for test"""
-        cls.user = User()
-        cls.user.first_name = "Kev"
-        cls.user.last_name = "Yo"
-        cls.user.email = "1234@yahoo.com"
-        cls.storage = FileStorage()
+        if getenv("HBNB_TYPE_STORAGE") == "db":
+            self.db = MySQLdb.connect(getenv("HBNB_MYSQL_HOST"),
+                                      getenv("HBNB_MYSQL_USER"),
+                                      getenv("HBNB_MYSQL_PWD"),
+                                      getenv("HBNB_MYSQL_DB"))
+            self.cursor = self.db.cursor()
 
-    @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.user
-
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db',
+                     "can't run")
     def tearDown(self):
-        """teardown"""
-        try:
-            os.remove("file.json")
-        except Exception:
-            pass
+        """do the teardown"""
+        if getenv("HBNB_TYPE_STORAGE") == "db":
+            self.db.close()
 
-    def test_pep8_FileStorage(self):
-        """Tests pep8 style"""
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db',
+                     "can't run")
+    def test_attributes_DBStorage(self):
+        """Test the methods"""
+        self.assertTrue(hasattr(DBStorage, '_DBStorage__engine'))
+        self.assertTrue(hasattr(DBStorage, '_DBStorage__session'))
+        self.assertTrue(hasattr(DBStorage, 'new'))
+        self.assertTrue(hasattr(DBStorage, 'save'))
+        self.assertTrue(hasattr(DBStorage, 'all'))
+        self.assertTrue(hasattr(DBStorage, 'delete'))
+        self.assertTrue(hasattr(DBStorage, 'reload'))
+
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db',
+                     "Do test this only if storage is db")
+    def test_pep8_DBStorage(self):
+        """pep"""
         style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/engine/file_storage.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
-
-    def test_all(self):
-        """tests if all works in File Storage"""
-        storage = FileStorage()
-        obj = storage.all()
-        self.assertIsNotNone(obj)
-        self.assertEqual(type(obj), dict)
-        self.assertIs(obj, storage._FileStorage__objects)
-
-    def test_new(self):
-        """test when new is created"""
-        storage = FileStorage()
-        obj = storage.all()
-        user = User()
-        user.id = 123455
-        user.name = "Kevin"
-        storage.new(user)
-        key = user.__class__.__name__ + "." + str(user.id)
-        self.assertIsNotNone(obj[key])
-
-    def test_reload_filestorage(self):
-        """
-        tests reload
-        """
-        self.storage.save()
-        Root = os.path.dirname(os.path.abspath("console.py"))
-        path = os.path.join(Root, "file.json")
-        with open(path, 'r') as f:
-            lines = f.readlines()
-        try:
-            os.remove(path)
-        except:
-            pass
-        self.storage.save()
-        with open(path, 'r') as f:
-            lines2 = f.readlines()
-        self.assertEqual(lines, lines2)
-        try:
-            os.remove(path)
-        except:
-            pass
-        with open(path, "w") as f:
-            f.write("{}")
-        with open(path, "r") as r:
-            for line in r:
-                self.assertEqual(line, "{}")
-        self.assertIs(self.storage.reload(), None)
+        pep = style.check_files(['models/engine/db_storage.py'])
+        self.assertEqual(pep.total_errors, 0, "fix pep8")
 
 
 if __name__ == "__main__":
