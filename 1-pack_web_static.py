@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 """Module that contains do_pack function."""
 from fabric.api import local
-from datetime import datetime
+from time import strftime
 
 
 def do_pack():
     """Generate .tgz archive of web_static/ folder."""
-    timenow = datetime.now()
+    time_now = strftime("%Y%M%d%H%M%S")
     try:
         local("mkdir -p versions")
-        filename = "versions/web_static_{}.tgz".format(timenow)
-        local("tar -cvzf {} web_static/".format(filename))
-        return filename
+        f_name = "versions/web_static_{}.tgz".format(time_now)
+        local("tar -cvzf {} web_static/".format(f_name))
+        return f_name
     except:
         return None
