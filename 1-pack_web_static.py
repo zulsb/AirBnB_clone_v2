@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Module that contains do_pack function."""
 from fabric.api import local
-from time import datetime
+from datetime import datetime
 
 
 def do_pack():
