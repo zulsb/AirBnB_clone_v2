@@ -30,9 +30,9 @@ def py_r(text="is cool"):
     return "Python {}".format(text.replace("_", " "))
 
 
-@app.route('/number/<int:n>')
+@app.route('/number/<int:n>', strict_slashes=False)
 def text_if_int(n):
-    """display text only if int given"""
+    """Module to display text only if int"""
     return "{:d} is a number".format(n)
 
 
