@@ -39,7 +39,7 @@ def text_if_int(n):
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def html_if_int(n):
     """Module to display html page only if int"""
-    return render_template("5-number.html", num_ber=n)
+    return render_template("5-number.html", n=n)
 
 
 if __name__ == "__main__":
