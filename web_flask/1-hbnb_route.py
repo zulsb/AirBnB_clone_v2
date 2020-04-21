@@ -6,14 +6,14 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 
-@app.route('/')
+@app.route('/', strict_slashes=False)
 def hello_HBNB():
     """Module to display text"""
     return "Hello HBNB!"
 
 
-@app.route('/hbnb')
-def hbnb():
+@app.route('/hbnb', strict_slashes=False)
+def HBNB():
     """Module to display text2"""
     return "HBNB"
 
