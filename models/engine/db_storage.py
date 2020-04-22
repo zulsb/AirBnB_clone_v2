@@ -23,7 +23,7 @@ class DBStorage:
     __session = None
 
     def __init__(self):
-        """create the engine ant link to the MySQL database and
+        """Create the engine ant link to the MySQL database and
         user created before"""
 
         user = getenv("HBNB_MYSQL_USER")
@@ -39,7 +39,7 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """query on the current database session all objects
+        """Query on the current database session all objects
         depending of the class name (argument cls)"""
         all_objs = {}
         all_classes = ["User", "State", "City", "Amenity", "Place", "Review"]
@@ -57,12 +57,12 @@ class DBStorage:
         return all_objs
 
     def new(self, obj):
-        """add the object to the current database session (self.__session)"""
+        """Add the object to the current database session (self.__session)"""
         if obj:
             self.__session.add(obj)
 
     def save(self):
-        """commit all changes of the current database
+        """Commit all changes of the current database
         session (self.__session)"""
         try:
             self.__session.commit()
@@ -70,13 +70,17 @@ class DBStorage:
             pass
 
     def delete(self, obj=None):
-        """delete from the current database session obj if not None"""
+        """Delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(eval(obj))
 
     def reload(self):
-        """create all tables in the database"""
+        """Create all tables in the database"""
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         session = scoped_session(Session)
         self.__session = session()
+
+    def close(self):
+        """Remove private session attribute"""
+        self.__session.close()
