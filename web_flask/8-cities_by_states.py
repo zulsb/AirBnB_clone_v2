@@ -65,7 +65,7 @@ def list_states_html():
     return render_template("7-states_list.html", states=states)
 
 
-@app.route('/states_list', strict_slashes=False)
+@app.route('/cities_by_states', strict_slashes=False)
 def html_states_cities():
     """Module to display html page where you look for ordered
     places and cities to insert in html in the LI tag"""
