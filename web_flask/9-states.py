@@ -78,11 +78,11 @@ def html_states_cities():
 def html_if_stateID(id):
     """Module to display html pagewhere you search ordered cities
     for this state ID"""
-    state = None
-    for o in storage.all("State").values():
-        if o.id == id:
-            state = o
-    return render_template("9-states.html", state=state)
+    state_obj = None
+    for state in storage.all("State").values():
+        if state.id == id:
+            state_obj = state
+    return render_template('9-states.html', state_obj=state_obj)
 
 
 if __name__ == "__main__":
