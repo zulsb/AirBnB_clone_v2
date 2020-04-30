@@ -81,11 +81,13 @@ def html_if_city_by_states(id):
     state_dict_ = storage.all("State")
     if id:
         state = state_dict_.get("State." + id)
-        return render_template("9-states.html", states=None, state=state)
+        return render_template("9-states.html", states=None,
+                               state=state, error=True)
     else:
         objects = list(state_dict_.values())
         objects.sort(key=lambda x: x.name)
-        return render_template("9-states.html", states=objects, state=None)
+        return render_template("9-states.html", states=objects,
+                               state=None, error=None)
 
 
 if __name__ == "__main__":
