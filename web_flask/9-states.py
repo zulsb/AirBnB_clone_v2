@@ -73,16 +73,19 @@ def html_states_cities():
     return render_template("8-cities_by_states.html", states=states)
 
 
-@app.route('/states', strict_slashes=False)
+@app.route('/states', defaults={"id": None}, strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
-def html_if_stateID(id):
-    """Module to display html pagewhere you search ordered cities
+def html_if_city_by_states(id):
+    """Module to display html page where you search ordered cities
     for this state ID"""
-    state_obj = None
-    for state in storage.all("State").values():
-        if state.id == id:
-            state_obj = state
-    return render_template('9-states.html', state_obj=state_obj)
+    state_dict_ = storage.all("State")
+    if id:
+        state = state_dict_.get("State." + id)
+        return render_template("9-states.html", states=None, state=state)
+    else:
+        objects = list(state_dict_.values())
+        objects.sort(key=lambda x: x.name)
+        return render_template("9-states.html", states=objects, state=None)
 
 
 if __name__ == "__main__":
